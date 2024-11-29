@@ -7,20 +7,38 @@ package util;
 
 public interface LinkedListADT <T> {
 
-    //  Adds one element to the start or end of this list
-    public void add (T element);
+    // Add a unique element to the end of the list
+    public void add(T element);
 
-    //  Removes and returns the first element from this list
+    // Method to remove the last element and return it
+
     public T remove();
 
-    //  Returns true if this list contains no elements
+    // Add an element at a specific position
+    public void add(T element, int position);
+
+    // Delete an element
+    public void delete(T element);
+
+    // Display all elements
+    public void display();
+
+    // Return the first element
+    public T getFirstElement();
+
+    // Return the last element
+    public T getLastElement();
+
+    // Return the next element
+    public T getNextElement(T element);
+
+    // Check if the list is empty
     public boolean isEmpty();
 
-    //  Returns the number of elements in this list
+    // Returns the size
     public int size();
 
-    //  Returns a string representation of this list
-    public String toString();
-
+    // Check if the list contains an element
+    public boolean contains(T element);
 
 }

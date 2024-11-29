@@ -1,81 +1,198 @@
 package util;
 
-public class LinkedList<T> implements LinkedListADT<T> {
+import java.util.NoSuchElementException;
 
-    private int count;  // the current number of elements in the list
-    private LinearNode<T> front; // points to the first node
-    private LinearNode<T> last; // points to the last node
+public class LinkedList<T> implements LinkedListADT<T>{
+    private Node<T> head;
+    private Node<T> tail;
 
+    private class Node<T> {
+        T data;
+        Node<T> next;
 
-    //  Creates an empty list.
-    public LinkedList() {
-        this.count = 0;
-        this.last = null;
-        this.front = null;
-    }
-
-
-    //  Adds an element to the list
-    public void add (T element)
-    {
-        LinearNode<T> node = new LinearNode<> (element);
-
-        if (size() == 0) {
-            this.last = node; // This is the last node
-            this.front = node; // This is the first node
-            this.count++;
-        } else {
-            last.setNext(node); // Add node to the list.
-            last = node; // This the new last node.
-
-            this.count++;
+        Node(T data) {
+            this.data = data;
         }
     }
 
+    // Add a unique element to the end of the list
+    public void add(T element) {
+        if (!contains(element)) {
+            Node<T> newNode = new Node<>(element);
+            if (head == null) {
+                head = tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
+    }
 
-    //  Removes and returns the first element from this list
+    // Method to remove the last element and return it
+    @Override
     public T remove() {
-
-        LinearNode<T> temp = null;
-        T result = null;
-        if (isEmpty()){
-            System.out.println("There are no nodes in the list");
-        }else {
-
-            result = this.front.getElement();
-            temp = this.front;
-            this.front = this.front.getNext();
-            temp.setNext(null); //dereference the original first element
-            count--;
+        // Handle the case where the list is empty
+        if (head == null) {
+            return null;
         }
-        return result;
 
+        // Handles if there is only one element
+        if (head == tail) {
+            T data = head.data;
+            head = tail = null;
+            return data;
+        }
+        // Find the second-to-last node
+        Node<T> current = head;
+        while (current.next != tail) {
+            current = current.next;
+        }
+
+        // Save the data to return
+        T data = tail.data;
+        tail = current;
+        tail.next = null;
+
+        return data;
     }
 
+    // Add an element at a specific position
+    @Override
+    public void add(T element, int position) {
+        if (position < 1) throw new IllegalArgumentException("Position must be at least 1");
+        Node<T> newNode = new Node<>(element);
+        if (position == 1) {
+            newNode.next = head;
+            head = newNode;
+            if (tail == null){
+                tail = newNode;
+            }
+        } else {
+            Node<T> previous = null;
+            Node<T> current = head;
+            int index = 1;
+            while (current != null && index < position) {
+                previous = current;
+                current = current.next;
+                index++;
+            }
+            if (previous == null) {
+                head = newNode;
+            } else {
+                previous.next = newNode;
+            }
+            newNode.next = current;
+            if (current == null) {
+                tail = newNode;
+            }
+        }
+    }
 
-    //  Returns true if this list contains no elements
+    // Delete an element
+    @Override
+    public void delete(T element) {
+        Node<T> previous = null;
+        Node<T> current = head;
+
+        while (current != null) {
+            if (current.data.equals(element)) {
+                if (previous == null) {
+                    head = current.next;
+                    if (head == null) tail = null;
+                } else {
+                    previous.next = current.next;
+                    if (previous.next == null) tail = previous;
+                }
+                return;
+            }
+            previous = current;
+            current = current.next;
+        }
+    }
+
+    // Display all elements
+    @Override
+    public void display() {
+        Node<T> current = head;
+        while (current != null) {
+            System.out.println(current.data);
+            current = current.next;
+        }
+    }
+
+    // Return the first node
+    public Node<T> getFirstNode() {
+        return head;
+    }
+
+    // Return the last node
+    public Node<T> getLastNode() {
+        return tail;
+    }
+
+    // Return the first element
+    @Override
+    public T getFirstElement() {
+        if (head == null) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return head.data;
+    }
+
+    // Return the last element
+    @Override
+    public T getLastElement() {
+        if (tail == null) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return tail.data;
+    }
+
+    // Return the next element
+    @Override
+    public T getNextElement(T element) {
+        Node<T> current = head;
+        while (current != null && !current.data.equals(element)) {
+            current = current.next;
+        }
+        if (current != null && current.next != null) {
+            return current.next.data;
+        } else {
+            throw new NoSuchElementException("No next element found");
+        }
+    }
+
+    // Check if the list is empty
+    @Override
     public boolean isEmpty() {
-        if (this.front == null)
-            return true;
-        else
-            return false;
+        return head == null;
     }
 
-
-    //  Returns the number of elements in this list
+    // Returns the size
+    @Override
     public int size() {
-        return this.count;
+        int count = 0;  // Initialize a counter to track the number of elements
+        Node<T> current = head;  // Start with the head of the list
+
+        while (current != null) {  // Traverse the list until the end
+            count++;               // Increment the counter for each node encountered
+            current = current.next;  // Move to the next node
+        }
+
+        return count;  // Return the total count of nodes in the list
     }
 
-    //  toString method
-    public String toString() {
-        LinearNode<T> current = null;
-        String fullList = "";
-
-        for (current = this.front; current != null; current = current.getNext()){
-            fullList = fullList + "\n" + current.getElement().toString();
+    // Check if the list contains an element
+    @Override
+    public boolean contains(T element) {
+        Node<T> current = head;
+        while (current != null) {
+            if (current.data.equals(element)) {
+                return true;
+            }
+            current = current.next;
         }
-        return fullList + "\n";
+        return false;
     }
 
 }

@@ -18,10 +18,18 @@ public class Employee {
         this.employeeNumber = employeeNumber;
         this.name = name;
         this.nOOfYearsExp = nOOfYearsExp;
-        this.courseName = courseName;
+        this.setCourseName(courseName);
+        if (this.nOOfYearsExp < 5){
+            System.out.println("Only Employees with over 5 years of experience are allowed on training courses.");
+        }
     }
 
-    public Employee(){}
+    public Employee(){
+        this.name = "";
+        this.employeeNumber = 0;
+        this.nOOfYearsExp = 0;
+        this.courseName = "ERROR";
+    }
 
     public int getEmployeeNumber() {
         return employeeNumber;
@@ -39,11 +47,11 @@ public class Employee {
         this.name = name;
     }
 
-    public int getnOOfYearsExp() {
+    public int getNoOfYearsExp() {
         return nOOfYearsExp;
     }
 
-    public void setnOOfYearsExp(int nOOfYearsExp) {
+    public void setNoOfYearsExp(int nOOfYearsExp) {
         this.nOOfYearsExp = nOOfYearsExp;
     }
 
@@ -52,7 +60,12 @@ public class Employee {
     }
 
     public void setCourseName(String courseName) {
-        this.courseName = courseName;
+        if (courseName.length() >= 4 && courseName.substring(0,4).equals("FOOD")) {
+            this.courseName = courseName;
+        } else {
+            this.courseName = "ERROR";
+            System.out.println("Invalid course name.");
+        }
     }
 
     public boolean isSame(Employee otherEmployee){
