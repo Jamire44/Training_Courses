@@ -1,5 +1,12 @@
 package util;
 
+/**
+ * File name: Employee.java
+ * Author: Jamie Doyle
+ * Student number: D24125998
+ * Description: Linked List
+ */
+
 import java.util.NoSuchElementException;
 
 public class LinkedList<T> implements LinkedListADT<T>{
@@ -31,24 +38,20 @@ public class LinkedList<T> implements LinkedListADT<T>{
     // Method to remove the last element and return it
     @Override
     public T remove() {
-        // Handle the case where the list is empty
         if (head == null) {
             return null;
         }
-
-        // Handles if there is only one element
         if (head == tail) {
             T data = head.data;
             head = tail = null;
             return data;
         }
-        // Find the second-to-last node
+
         Node<T> current = head;
         while (current.next != tail) {
             current = current.next;
         }
 
-        // Save the data to return
         T data = tail.data;
         tail = current;
         tail.next = null;
@@ -171,12 +174,12 @@ public class LinkedList<T> implements LinkedListADT<T>{
     // Returns the size
     @Override
     public int size() {
-        int count = 0;  // Initialize a counter to track the number of elements
-        Node<T> current = head;  // Start with the head of the list
+        int count = 0;
+        Node<T> current = head;
 
-        while (current != null) {  // Traverse the list until the end
-            count++;               // Increment the counter for each node encountered
-            current = current.next;  // Move to the next node
+        while (current != null) {
+            count++;
+            current = current.next;
         }
 
         return count;  // Return the total count of nodes in the list

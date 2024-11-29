@@ -1,9 +1,11 @@
-//Abstract Data Type definition for a Linked List
-
-//Note that this is not a full definition as we are only implementing some
-//of the standard functions associated with a list.
-
 package util;
+
+/**
+ * File name: Employee.java
+ * Author: Jamie Doyle
+ * Student number: D24125998
+ * Description: Linked List ADT
+ */
 
 public interface LinkedListADT <T> {
 

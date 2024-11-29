@@ -1,5 +1,11 @@
 package util;
 
+/**
+ * File name: Employee.java
+ * Author: Jamie Doyle
+ * Student number: D24125998
+ * Description: Node Class
+ */
 
 public class LinearNode<T>
 {
